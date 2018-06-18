@@ -6,7 +6,27 @@ from django.db import models
 class Employee(models.Model):
     name = models.CharField(max_length=255)
     job_title= models.TextField(blank=True, max_length=255)
-    experience = models.IntegerField()
+    years_experience = models.IntegerField()
+
+    PRODUCTION = 'PR'
+    RESEARCH_DEVELOPMENT= 'R&D'
+    PURCHASING = 'PU'
+    MARKETING = 'MA'
+    HUMAN_RESOURCES = 'HR'
+    ACCOUTING = 'AC'
+    DEPARTMENT_CHOICES = (
+        (PRODUCTION, 'Production'),
+        (RESEARCH_DEVELOPMENT, 'Research and Development'),
+        (PURCHASING, 'Purchasing'),
+        (MARKETING, 'Marketing'),
+        (HUMAN_RESOURCES, 'Human Resource Management'),
+        (ACCOUTING, 'Accounting')
+    )
+
+    department = models.CharField(max_length=2,
+                                      choices=DEPARTMENT_CHOICES,
+                                      default=PRODUCTION)
+
     image = models.FileField(upload_to='images/')
 
 
