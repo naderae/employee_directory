@@ -10,14 +10,20 @@ class EmployeeForm(forms.ModelForm):
         labels = {
             'years_experience': ('years of experience')
         }
-        # widgets = {
-        #     'years_experience': forms.TextInput(
-        #         attrs={'id': 'post-name', 'required': True, 'placeholder': 'My name is...'}
-        #     ),
-        #     'job_title': forms.TextInput(
-        #         attrs={'id': 'post-job-title', 'required': True, 'placeholder': 'My current title...'}
-        #     ),
-        #     'experience': forms.TextInput(
-        #         attrs={'id': 'post-experience', 'required': True, 'placeholder': 'Years of experience...'}
-        #     ),
-        # }
+        widgets = {
+            'name': forms.TextInput(
+                attrs={'id': 'employee-name', 'required': True, 'placeholder': 'Employee name...'}
+            ),
+            'job_title': forms.TextInput(
+                attrs={'id': 'employee-job-title', 'required': True, 'placeholder': 'Employee title'}
+            ),
+            'years_experience': forms.TextInput(
+                attrs={'id': 'employee-years-experience', 'required': True, 'placeholder': 'Years of experience...'}
+            ),
+            'department': forms.Select(
+                attrs={'id': 'employee-department', 'required': True, 'placeholder': 'department...'}
+            ),
+            'image': forms.FileInput(
+                attrs={'id': 'employee-image', 'required': True}
+            ),
+        }

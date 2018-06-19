@@ -6,7 +6,39 @@
 
 $(function() {
 
+  // submit post on submit
+  $('#employee-form').on('submit', function(event){
+    event.preventDefault();
+    console.log("form submitted!");
+    create_employee();
+  })
 
+  // AJAX for posting a new employees
+  function create_employee() {
+    // console.log("create post is working!") // sanity check
+    // console.log($('#employee-name').val())
+    // console.log($('#employee-job-title').val())
+    // console.log($('#employee-years-experience').val())
+    // console.log($('#employee-department').val())
+    // console.log($('#employee-image').val())
+    $.ajax({
+      url: "/employees/create_post/", // target the endpoint
+      type: "POST",
+      data: {name: $('#employee-name').val(), job_title: $('#employee-job-title').val(), years_experience: $('#employee-years-experience').val(), department: $('#employee-department').val()},
+
+      // handle a successful reponse
+      success: function(json) {
+        ('#employee-form').trigger("reset");
+        console.log(json);
+        console.log('success');
+      },
+      // handle a non-successful response
+      error: function(xhr, errmsg, err){
+        $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+" <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+      }
+    });
+};
 
     // This function gets cookie with a given name
     function getCookie(name) {

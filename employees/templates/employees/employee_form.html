@@ -1,5 +1,5 @@
 <h2>Employee Form</h2>
-<form class="post-form" method="post">
+<form action="{% url 'employees:create' %}" method="post" enctype="multipart/form-data" id="employee-form">
   {% csrf_token %}
   {{ form.as_p }}
   <button type="submit" class="save btn btn-default">Save</button>
