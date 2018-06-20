@@ -4,7 +4,9 @@
 // })
 
 
-$(function() {
+$(document).ready(function() {
+
+
 
   // submit post on submit
   $('#employee-form').on('submit', function(event){
@@ -15,22 +17,23 @@ $(function() {
 
   // AJAX for posting a new employees
   function create_employee() {
-    // console.log("create post is working!") // sanity check
-    // console.log($('#employee-name').val())
-    // console.log($('#employee-job-title').val())
-    // console.log($('#employee-years-experience').val())
-    // console.log($('#employee-department').val())
-    // console.log($('#employee-image').val())
+
     $.ajax({
       url: "/employees/create_post/", // target the endpoint
       type: "POST",
       data: {name: $('#employee-name').val(), job_title: $('#employee-job-title').val(), years_experience: $('#employee-years-experience').val(), department: $('#employee-department').val()},
+      // $(this).serialize(),
+
 
       // handle a successful reponse
       success: function(json) {
-        ('#employee-form').trigger("reset");
-        console.log(json);
-        console.log('success');
+        $('#employee-form').trigger("reset");
+        // console.log(json);
+        // console.log('success');
+        $("#talk").append("<tr id=" + json.employeepk + "><td>" + json.name + "</td> <td>" + json.job_title + "</td> <td>" + json.years_experience + "</td> <td>" + json.department + "</td><td> <a data-employeeid="+json.employeepk+" class='delete'>delete</a></td><td> <a class='update' data-employeepk=" + json.employeepk + ">update</a> </td></tr> ")
+        $("#" + json.employeepk).prop('disabled',false);
+        console.log("success");
+        window.location.reload();
       },
       // handle a non-successful response
       error: function(xhr, errmsg, err){
@@ -38,7 +41,65 @@ $(function() {
             console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
       }
     });
-};
+  };
+
+  $(".update").on('click', function(e){
+      console.log(e.target.dataset.employeepk);
+      var employee_pk = e.target.dataset.employeepk;
+      // var employee_primary_key = $(this).attr('id').split('-')[2];
+      // console.log(employee_primary_key) // sanity check
+      update_employee(employee_pk);
+  });
+
+  
+
+
+
+
+  // Delete post on click
+  $(".delete").on('click', function(e){
+      console.log(e.target.dataset.employeeid);
+      var employee_id = e.target.dataset.employeeid;
+      // var employee_primary_key = $(this).attr('id').split('-')[2];
+      // console.log(employee_primary_key) // sanity check
+      delete_employee(employee_id);
+  });
+
+
+  function delete_employee(employee_id){
+    if (confirm('are you sure you want to remove this post?')==true){
+        $.ajax({
+            url : "/employees/delete_post/", // the endpoint
+            type : "DELETE", // http method
+            data : { employeepk : employee_id}, // data sent with the delete request
+            success : function(json) {
+                // hide the post
+              $('#'+employee_id).hide(); // hide the post on success
+              console.log("post deletion successful");
+            },
+
+            error : function(xhr,errmsg,err) {
+                // Show an error
+                $('#results').html("<div class='alert-box alert radius' data-alert>"+
+                "Oops! We have encountered an error. <a href='#' class='close'>&times;</a></div>"); // add error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    } else {
+        return false;
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
 
     // This function gets cookie with a given name
     function getCookie(name) {

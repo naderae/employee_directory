@@ -2,5 +2,6 @@
 <form action="{% url 'employees:create' %}" method="post" enctype="multipart/form-data" id="employee-form">
   {% csrf_token %}
   {{ form.as_p }}
+  <div id="results"></div>
   <button type="submit" class="save btn btn-default">Save</button>
 </form>

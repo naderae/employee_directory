@@ -6,7 +6,7 @@ class EmployeeForm(forms.ModelForm):
 
     class Meta:
         model = Employee
-        fields = ('name', 'job_title', 'years_experience', 'department', 'image',)
+        fields = ('name', 'job_title', 'years_experience', 'department')
         labels = {
             'years_experience': ('years of experience')
         }
@@ -17,13 +17,13 @@ class EmployeeForm(forms.ModelForm):
             'job_title': forms.TextInput(
                 attrs={'id': 'employee-job-title', 'required': True, 'placeholder': 'Employee title'}
             ),
-            'years_experience': forms.TextInput(
+            'years_experience': forms.NumberInput(
                 attrs={'id': 'employee-years-experience', 'required': True, 'placeholder': 'Years of experience...'}
             ),
             'department': forms.Select(
                 attrs={'id': 'employee-department', 'required': True, 'placeholder': 'department...'}
             ),
-            'image': forms.FileInput(
-                attrs={'id': 'employee-image', 'required': True}
-            ),
+            # 'image': forms.FileInput(
+            #     attrs={'id': 'employee-image', 'required': True}
+            # ),
         }

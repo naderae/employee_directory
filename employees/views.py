@@ -3,13 +3,17 @@ from django.http import HttpResponse
 from employees.models import Employee
 from .forms import EmployeeForm
 import json
+from django.http import JsonResponse
+from django.forms.models import model_to_dict
+from django.http import QueryDict
 
 
 # Create your views here.
 def index(request):
+    all_employees = Employee.objects.all()
 
     form = EmployeeForm()
-    return render(request, 'employees/index.html', {'form': form})
+    return render(request, 'employees/index.html', {'form': form, 'all_employees':all_employees})
 
 def create_post(request):
 
@@ -34,11 +38,34 @@ def create_post(request):
         # response_data['image'] = employee.image
 
 
+
+        return      HttpResponse(
+               json.dumps(response_data),
+                content_type="application/json"
+            )
+
+    else:
+        return HttpResponse(
+            json.dumps({"nothing to see": "this isn't happening"}),
+            content_type="application/json"
+        )
+
+def delete_post(request):
+     if request.method == 'DELETE':
+
+        employee = Employee.objects.get(
+            pk=int(QueryDict(request.body).get('employeepk')))
+
+        employee.delete()
+
+        response_data = {}
+        response_data['msg'] = 'employee was deleted.'
+
         return HttpResponse(
             json.dumps(response_data),
             content_type="application/json"
         )
-    else:
+     else:
         return HttpResponse(
             json.dumps({"nothing to see": "this isn't happening"}),
             content_type="application/json"
